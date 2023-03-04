@@ -50,7 +50,7 @@ const getPackageJsonTemplate = (kebabCase: string): string => {
       "url": "git+https://github.com/no-gravity-company/no-gravity-elements.git"
     },
     "scripts": {
-      "build": "tsc --jsx react --emitDeclarationOnly --esModuleInterop --module ESNext --target ESNext --moduleResolution node --declaration --declarationDir ./lib/types src/*.ts && esbuild src/index.ts --bundle --outfile=lib/index.js --platform=node --target=es2018 --minify --sourcemap --external:react --external:react-dom"
+      "build": "tsc --jsx react --emitDeclarationOnly --esModuleInterop --module ESNext --target ESNext --moduleResolution node --declaration --declarationDir ./lib/types src/*.ts && esbuild src/index.ts --bundle --outfile=lib/index.js --platform=node --target=es2018 --minify --sourcemap --external:react --external:react-dom",
       "publish-component": "yarn publish --access=public"
     },
     "bugs": {

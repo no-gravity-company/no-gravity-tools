@@ -1,6 +1,6 @@
 {
   "name": "@no-gravity-tools/component-generator",
-  "version": "1.0.7",
+  "version": "1.0.9",
   "description": "Create template for preact web components",
   "author": "No Gravity Team",
   "private": false,
