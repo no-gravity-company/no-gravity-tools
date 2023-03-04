@@ -1,20 +1,20 @@
-  import * as fsp from 'fs/promises';
-  import * as path from 'path';
-  
-  const errorMessage = (message: string) => {
-    console.error(message);
-    process.exit(1);
-  }
+import * as fsp from 'fs/promises';
+import * as path from 'path';
 
-  const getKebabCase = (name: string) => {
-    return name
-        .replace(/([a-z])([A-Z])/g, '$1-$2')
-        .replace(/[\s_]+/g, '-')
-        .toLocaleLowerCase();
-  }
+const errorMessage = (message: string) => {
+  console.error(message);
+  process.exit(1);
+};
 
-  const getComponentTemplateWithValues = (componentName: string): string => {
-    return `import { Fragment, FunctionComponent, h } from 'preact';
+const getKebabCase = (name: string) => {
+  return name
+    .replace(/([a-z])([A-Z])/g, '$1-$2')
+    .replace(/[\s_]+/g, '-')
+    .toLocaleLowerCase();
+};
+
+const getComponentTemplateWithValues = (componentName: string): string => {
+  return `import { Fragment, FunctionComponent, h } from 'preact';
 import { ${componentName}Props } from './types'
 
 const ${componentName}: FunctionComponent<${componentName}Props> = ({ x }: ${componentName}Props) => {
@@ -24,14 +24,15 @@ const ${componentName}: FunctionComponent<${componentName}Props> = ({ x }: ${com
 };
 
 export default ${componentName};
-`
-  }
-  
-  const getGitIgnoreTemplate = (): string => {
-    return 'lib'
-  }
+`;
+};
 
-const getPackageJsonTemplate = (kebabCase: string): string => {
+const getGitIgnoreTemplate = (): string => {
+  return 'lib';
+};
+
+const getPackageJsonTemplate = (componentName: string): string => {
+  const kebabCase = getKebabCase(componentName);
   return `{
     "name": "@no-gravity-elements/${kebabCase}",
     "version": "1.0.0",
@@ -57,43 +58,13 @@ const getPackageJsonTemplate = (kebabCase: string): string => {
       "url": "https://github.com/no-gravity-company/no-gravity-elements/issues"
     }
   }
-    `
-  }
-
-  const getTypesTemplate = (componentName: string): string => {
-    return `export interface ${componentName}Props {
-    x: string;
-}
-    `
-  }
-
-const getStoryTemplate = (componentName: string, kebabCase: string): string => {
-  return `import { h } from 'preact';
-import './lib/index';
-
-export default {
-  title: 'My ${componentName}',
-  parameters: {
-    // Specify that the component is a Web Component
-    webComponents: {
-      // Set the tag name of the Web Component
-      tagName: 'nge-${kebabCase}',
-    },
-  },
-};
-
-export const Default = () => <nge-${kebabCase} />;
     `;
 };
 
-const getRegisterTemplate = (
-  componentName: string,
-  kebabCase: string
-): string => {
-  return `import register from 'preact-custom-element';
-import ${componentName} from './${componentName}';
-
-register(${componentName}, 'nge-${kebabCase}', [], { shadow: true });
+const getTypesTemplate = (componentName: string): string => {
+  return `export interface ${componentName}Props {
+    x: string;
+}
     `;
 };
 
@@ -102,17 +73,17 @@ const main = async (): Promise<void> => {
   const componentTypeIndex = process.argv.indexOf('--type');
   let componentTypeValue = '';
 
-    if (componentTypeIndex > -1) {
-        // Retrieve the value after --type
-        componentTypeValue = process.argv[componentTypeIndex + 1];
-        !componentTypeValue && errorMessage('No component type was provided');
-    } else {
-        errorMessage('No --type flag was provided')
-    }
+  if (componentTypeIndex > -1) {
+    // Retrieve the value after --type
+    componentTypeValue = process.argv[componentTypeIndex + 1];
+    !componentTypeValue && errorMessage('No component type was provided');
+  } else {
+    errorMessage('No --type flag was provided');
+  }
 
-    // Checks for --name and if it has a value
-    const componentNameIndex = process.argv.indexOf('--name');
-    let componentNameValue: string = '';
+  // Checks for --name and if it has a value
+  const componentNameIndex = process.argv.indexOf('--name');
+  let componentNameValue = '';
 
   if (componentNameIndex > -1) {
     // Retrieve the value after --name
@@ -125,8 +96,6 @@ const main = async (): Promise<void> => {
       componentTypeValue,
       componentNameValue
     );
-    const kebabCase = getKebabCase(componentNameValue);
-
     // TODO: use try and catch in case the component already exists
     await fsp.mkdir(componentFolderPath);
     // Component .tsx file
@@ -146,9 +115,7 @@ const main = async (): Promise<void> => {
     });
     // package.json
     const packageJsonPath = path.join(componentFolderPath, 'package.json');
-    const packageJsonTemplate = getPackageJsonTemplate(
-      kebabCase
-    );
+    const packageJsonTemplate = getPackageJsonTemplate(componentNameValue);
     await fsp.writeFile(packageJsonPath, packageJsonTemplate, {
       encoding: 'utf-8',
     });
@@ -158,20 +125,10 @@ const main = async (): Promise<void> => {
     const typesPath = path.join(typesFolderPath, 'index.ts');
     const typesTemplate = getTypesTemplate(componentNameValue);
     await fsp.writeFile(typesPath, typesTemplate, { encoding: 'utf-8' });
-    // story
-    const storyPath = path.join(
-      componentFolderPath,
-      `${componentNameValue}.stories.tsx`
-    );
-    const storyTemplate = getStoryTemplate(componentNameValue, kebabCase);
-    await fsp.writeFile(storyPath, storyTemplate, { encoding: 'utf-8' });
-    // register
-    const registerPath = path.join(componentFolderPath, 'register.ts');
-    const registerTemplate = getRegisterTemplate(componentNameValue, kebabCase);
-    await fsp.writeFile(registerPath, registerTemplate, { encoding: 'utf-8' });
+
     // TODO: unit-tests
     // TODO: integration-tests
   }
 };
 
-  main();
+main();
