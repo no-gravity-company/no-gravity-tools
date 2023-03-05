@@ -72,7 +72,7 @@ const getStoryTemplate = (componentName: string, kebabCase: string): string => {
 import './lib/index';
 
 export default {
-  title: 'My ${componentName}',
+  title: '${componentName}',
   parameters: {
     // Specify that the component is a Web Component
     webComponents: {
@@ -93,7 +93,28 @@ const getRegisterTemplate = (
     return `import register from 'preact-custom-element';
 import ${componentName} from './${componentName}';
 
-register(${componentName}, 'nge-${kebabCase}', [], { shadow: true });
+const alreadyDefined = (tagName: string) => customElements.get(tagName) !== undefined
+if(!alreadyDefined('nge-${kebabCase}')) {
+    register(${componentName}, 'nge-${kebabCase}', [], { shadow: true });
+}
+    `;
+};
+
+const getIntegrationTestsTemplate = (
+    componentName: string,
+    kebabCase: string
+): string => {
+    return `/// <reference types="cypress" />
+
+context('${componentName}', () => {
+    beforeEach(() => {
+        cy.visit('/iframe.html?args=&id=${kebabCase}--default&viewMode=story');
+    });
+
+    it('should check if <nge-${kebabCase}> is present in the dom', () => {
+        cy.get('my-counter').should('be.visible');
+    });
+});
     `;
 };
 
@@ -112,7 +133,7 @@ const main = async (): Promise<void> => {
 
     // Checks for --name and if it has a value
     const componentNameIndex = process.argv.indexOf('--name');
-    let componentNameValue: string = '';
+    let componentNameValue = '';
 
     if (componentNameIndex > -1) {
         // Retrieve the value after --name
@@ -173,8 +194,19 @@ const main = async (): Promise<void> => {
         await fsp.writeFile(registerPath, registerTemplate, {
             encoding: 'utf-8',
         });
+        // integration-tests
+        const integrationTestsPath = path.join(
+            componentFolderPath,
+            `${componentNameValue}.integration.spec.ts`
+        );
+        const integrationTestsTemplate = getIntegrationTestsTemplate(
+            componentNameValue,
+            kebabCase
+        );
+        await fsp.writeFile(integrationTestsPath, integrationTestsTemplate, {
+            encoding: 'utf-8',
+        });
         // TODO: unit-tests
-        // TODO: integration-tests
     }
 };
 

@@ -1,9 +1,9 @@
 {
     "minify": true,
     "jsc": {
-      "parser": {
-        "syntax": "typescript"
-      },
-      "target": "esnext"
+        "parser": {
+            "syntax": "typescript"
+        },
+        "target": "esnext"
     }
-  }
+}

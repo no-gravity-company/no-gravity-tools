@@ -1,30 +1,30 @@
 {
-  "name": "@no-gravity-tools/component-generator",
-  "version": "1.0.9",
-  "description": "Create template for preact web components",
-  "author": "No Gravity Team",
-  "private": false,
-  "homepage": "https://github.com/no-gravity-company/no-gravity-tools#readme",
-  "license": "ISC",
-  "main": "lib/index.js",
-  "type": "module",
-  "typings": "lib/index.d.ts",
-  "directories": {
-    "lib": "lib"
-  },
-  "files": [
-    "lib/index.js",
-    "lib/index.js.map"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/no-gravity-company/no-gravity-tools.git"
-  },
-  "scripts": {
-    "build": "tsc --emitDeclarationOnly --esModuleInterop --module ESNext --target ESNext --moduleResolution node --declaration --declarationDir ./lib/types src/*.ts && swc src --out-dir lib/index.js -s",
-    "publish-tool": "yarn publish --access=public"
-  },
-  "bugs": {
-    "url": "https://github.com/no-gravity-company/no-gravity-tools/issues"
-  }
+    "name": "@no-gravity-tools/component-generator",
+    "version": "1.0.10",
+    "description": "Create template for preact web components",
+    "author": "No Gravity Team",
+    "private": false,
+    "homepage": "https://github.com/no-gravity-company/no-gravity-tools#readme",
+    "license": "ISC",
+    "main": "lib/index.js",
+    "type": "module",
+    "typings": "lib/index.d.ts",
+    "directories": {
+        "lib": "lib"
+    },
+    "files": [
+        "lib/index.js",
+        "lib/index.js.map"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/no-gravity-company/no-gravity-tools.git"
+    },
+    "scripts": {
+        "build": "tsc --emitDeclarationOnly --esModuleInterop --module ESNext --target ESNext --moduleResolution node --declaration --declarationDir ./lib/types src/*.ts && swc src --out-dir lib/index.js -s",
+        "publish-tool": "yarn publish --access=public"
+    },
+    "bugs": {
+        "url": "https://github.com/no-gravity-company/no-gravity-tools/issues"
+    }
 }
