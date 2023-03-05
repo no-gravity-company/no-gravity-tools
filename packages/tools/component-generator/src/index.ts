@@ -88,10 +88,11 @@ export const Default = () => <nge-${kebabCase} />;
 
 const getRegisterTemplate = (
     componentName: string,
-    kebabCase: string
+    kebabCase: string,
+    componentType: string
 ): string => {
     return `import register from 'preact-custom-element';
-import ${componentName} from './${componentName}';
+import ${componentName} from '@/${componentType}/${componentName}/${componentName}';
 
 const alreadyDefined = (tagName: string) => customElements.get(tagName) !== undefined
 if(!alreadyDefined('nge-${kebabCase}')) {
@@ -190,7 +191,8 @@ const main = async (): Promise<void> => {
         const registerPath = path.join(componentFolderPath, 'register.ts');
         const registerTemplate = getRegisterTemplate(
             componentNameValue,
-            kebabCase
+            kebabCase,
+            componentTypeValue
         );
         await fsp.writeFile(registerPath, registerTemplate, {
             encoding: 'utf-8',
