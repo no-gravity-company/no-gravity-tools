@@ -104,11 +104,12 @@ const getIntegrationTestsTemplate = (
     componentName: string,
     kebabCase: string
 ): string => {
+    const lowerCaseName = componentName.toLowerCase();
     return `/// <reference types="cypress" />
 
 context('${componentName}', () => {
     beforeEach(() => {
-        cy.visit('/iframe.html?args=&id=${kebabCase}--default&viewMode=story');
+        cy.visit('/iframe.html?args=&id=${lowerCaseName}--default&viewMode=story');
     });
 
     it('should check if <nge-${kebabCase}> is present in the dom', () => {
