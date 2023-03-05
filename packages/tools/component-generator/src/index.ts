@@ -112,7 +112,7 @@ context('${componentName}', () => {
     });
 
     it('should check if <nge-${kebabCase}> is present in the dom', () => {
-        cy.get('my-counter').should('be.visible');
+        cy.get('nge-${kebabCase}').should('be.visible');
     });
 });
     `;
