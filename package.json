@@ -11,7 +11,9 @@
         "publish-tools": "yarn workspaces run publish-tool",
         "lint": "yarn eslint .",
         "fix-lint": "yarn eslint . --fix",
-        "format": "yarn prettier --write ."
+        "format": "yarn prettier --write .",
+        "link-tools": "lerna exec -- yarn link",
+        "unlink-tools": "lerna exec -- yarn link"
     },
     "devDependencies": {
         "@swc/cli": "^0.1.62",
