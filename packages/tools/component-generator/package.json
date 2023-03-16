@@ -21,7 +21,9 @@
         "url": "git+https://github.com/no-gravity-company/no-gravity-tools.git"
     },
     "scripts": {
-        "build": "tsc --emitDeclarationOnly --esModuleInterop --module ESNext --target ESNext --moduleResolution node --declaration --declarationDir ./lib/types src/*.ts && swc src --out-dir lib/index.js -s",
+        "compile": "swc src --out-dir lib/index.js -s",
+        "ts:check": "tsc --emitDeclarationOnly --esModuleInterop --module ESNext --target ESNext --moduleResolution node --declaration --declarationDir ./lib/types src/*.ts",
+        "build": "yarn ts:check & yarn compile",
         "publish-tool": "yarn publish --access=public"
     },
     "bugs": {
