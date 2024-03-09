@@ -45,6 +45,11 @@ const getPackageJsonTemplate = (kebabCase: string): string => {
     "directories": {
       "lib": "lib"
     },
+    "files": [
+      "lib/index.js",
+      "lib/index.js.map",
+      "types/index.d.ts"
+    ],
     "repository": {
       "type": "git",
       "url": "git+https://github.com/no-gravity-company/no-gravity-elements.git"
