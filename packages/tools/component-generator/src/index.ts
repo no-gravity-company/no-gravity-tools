@@ -72,38 +72,68 @@ const getTypesTemplate = (componentName: string): string => {
     `;
 };
 
-const getStoryTemplate = (componentName: string, kebabCase: string): string => {
-    return `import { h } from 'preact';
-import './lib/index';
-
-export default {
-  title: '${componentName}',
-  parameters: {
-    // Specify that the component is a Web Component
-    webComponents: {
-      // Set the tag name of the Web Component
-      tagName: 'nge-${kebabCase}',
-    },
-  },
-};
-
-export const Default = () => <nge-${kebabCase} />;
-    `;
-};
-
-const getRegisterTemplate = (
+const getStoryTemplate = (
     componentName: string,
     kebabCase: string,
     componentType: string
 ): string => {
-    return `import register from 'preact-custom-element';
-import ${componentName} from '@/${componentType}/${componentName}/${componentName}';
+    return `import { Meta, StoryObj } from '@storybook/web-components';
+import { html } from 'lit-html';
 
-const alreadyDefined = (tagName: string) => customElements.get(tagName) !== undefined
-if(!alreadyDefined('nge-${kebabCase}')) {
-    register(${componentName}, 'nge-${kebabCase}', [], { shadow: true });
-}
-    `;
+import { ${componentName}Props } from '@${componentType}/${componentName}/types';
+
+import '@no-gravity-elements/${kebabCase}';
+
+type CustomArgs = ${componentName}Props & { text: string };
+
+const meta: Meta<CustomArgs> = {
+  title: '${componentName}',
+  component: 'nge-${kebabCase}',
+  parameters: {
+    webComponents: {
+      tagName: 'nge-${kebabCase}',
+    },
+  },
+  argTypes: {
+    x: {
+      description: 'Custom prop text',
+      control: { type: 'text' },
+    },
+    text: {
+      description: 'Custom text',
+      control: { type: 'text' },
+    },
+  },
+  render: ({ x, text }) => html\` <nge-${kebabCase} x=\${x}>\${text}</nge-${kebabCase}> \`,
+};
+
+export default meta;
+type Story = StoryObj<CustomArgs>;
+
+export const Default: Story = {
+  args: {
+    text: 'Text',
+    x: 'props'
+  },
+};
+`;
+};
+
+const getUnitTestsTemplate = (
+    componentName: string,
+    componentType: string
+): string => {
+    return `import { h } from 'preact';
+import { shallow } from 'enzyme';
+
+import ${componentName} from '@${componentType}/${componentName}/${componentName}';
+
+describe('${componentName}', () => {
+  it('should match the snapshot', () => {
+    const wrapper = shallow(<${componentName} x='test'>Test</${componentName}>);
+    expect(wrapper).toMatchSnapshot();
+  });
+});`;
 };
 
 const getIntegrationTestsTemplate = (
@@ -190,16 +220,22 @@ const main = async (): Promise<void> => {
             componentFolderPath,
             `${componentNameValue}.stories.tsx`
         );
-        const storyTemplate = getStoryTemplate(componentNameValue, kebabCase);
-        await fsp.writeFile(storyPath, storyTemplate, { encoding: 'utf-8' });
-        // register
-        const registerPath = path.join(componentFolderPath, 'register.ts');
-        const registerTemplate = getRegisterTemplate(
+        const storyTemplate = getStoryTemplate(
             componentNameValue,
             kebabCase,
             componentTypeValue
         );
-        await fsp.writeFile(registerPath, registerTemplate, {
+        await fsp.writeFile(storyPath, storyTemplate, { encoding: 'utf-8' });
+        // unit tests
+        const unitTestsPath = path.join(
+            componentFolderPath,
+            `${componentNameValue}.spec.tsx`
+        );
+        const unitTestsTemplate = getUnitTestsTemplate(
+            componentNameValue,
+            componentTypeValue
+        );
+        await fsp.writeFile(unitTestsPath, unitTestsTemplate, {
             encoding: 'utf-8',
         });
         // integration-tests
@@ -214,7 +250,6 @@ const main = async (): Promise<void> => {
         await fsp.writeFile(integrationTestsPath, integrationTestsTemplate, {
             encoding: 'utf-8',
         });
-        // TODO: unit-tests
     }
 };
 

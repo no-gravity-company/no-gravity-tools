@@ -15,7 +15,7 @@
         "fix-lint": "yarn eslint . --fix",
         "format": "yarn prettier --write .",
         "link-tools": "lerna exec -- yarn link",
-        "unlink-tools": "lerna exec -- yarn link",
+        "unlink-tools": "lerna exec -- yarn unlink",
         "watch": "node scripts/watch.js"
     },
     "devDependencies": {
