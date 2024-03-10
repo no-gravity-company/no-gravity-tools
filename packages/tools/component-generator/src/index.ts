@@ -87,7 +87,7 @@ import '@no-gravity-elements/${kebabCase}';
 type CustomArgs = ${componentName}Props & { text: string };
 
 const meta: Meta<CustomArgs> = {
-  title: '${componentName}',
+  title: '${componentType}/${componentName}',
   component: 'nge-${kebabCase}',
   parameters: {
     webComponents: {
@@ -138,14 +138,15 @@ describe('${componentName}', () => {
 
 const getIntegrationTestsTemplate = (
     componentName: string,
-    kebabCase: string
+    kebabCase: string,
+    componentType: string
 ): string => {
     const lowerCaseName = componentName.toLowerCase();
     return `/// <reference types="cypress" />
 
 context('${componentName}', () => {
     beforeEach(() => {
-        cy.visit('/iframe.html?args=&id=${lowerCaseName}--default&viewMode=story');
+        cy.visit('/iframe.html?args=&id=${componentType}-${lowerCaseName}--default&viewMode=story');
     });
 
     it('should check if <nge-${kebabCase}> is present in the dom', () => {
@@ -245,7 +246,8 @@ const main = async (): Promise<void> => {
         );
         const integrationTestsTemplate = getIntegrationTestsTemplate(
             componentNameValue,
-            kebabCase
+            kebabCase,
+            componentTypeValue
         );
         await fsp.writeFile(integrationTestsPath, integrationTestsTemplate, {
             encoding: 'utf-8',
