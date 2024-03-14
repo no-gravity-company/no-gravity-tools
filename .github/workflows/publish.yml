@@ -1,0 +1,52 @@
+name: Publish
+on: workflow_call
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.ACTIONS_PAT }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.ACTIONS_PAT }}
+          fetch-depth: 0
+
+      - name: Setup job
+        uses: ./.github/actions/setup-job
+
+      - name: Set git config
+        uses: ./.github/actions/set-git-config
+
+      - name: Install Lerna
+        run: yarn global add lerna@^6.5.1
+
+      - name: Get published branch code
+        id: get_branch_code
+        run: |
+          last_closed_pr=$(curl -s -H "Authorization: Bearer ${{ secrets.ACTIONS_PAT }}" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls?state=closed&per_page=1")
+          branch_name=$(echo $last_closed_pr | jq -r '.[0].head.ref')
+          branch_code=$(echo $branch_name | sed -E 's/^([^_]+)_.*$/\1/')
+          echo "branch_code=$branch_code" >> $GITHUB_OUTPUT
+
+      - name: Bump package versions
+        run: |
+          if lerna changed --json --loglevel=error | grep -qF "packages/"; then
+            yarn lerna version --yes --conventional-commits --include-merged-tags --message "${{ steps.get_branch_code.outputs.branch_code }}: Publish [skip ci]"
+          else
+            echo "No changes in packages"
+            exit 0
+          fi
+
+      - name: Set npm registry
+        run: |
+          echo -e "\n//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> .npmrc
+          git update-index --skip-worktree -- .npmrc
+
+      - name: Publish packages
+        run: |
+          npx lerna publish from-package --yes --no-git-tag-version
+

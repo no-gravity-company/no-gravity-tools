@@ -2,7 +2,6 @@ import * as fsp from 'fs/promises';
 import * as path from 'path';
 import {
     errorMessage,
-    getKebabCase,
     getComponentTemplateWithValues,
     getGitIgnoreTemplate,
     getPackageJsonTemplate,
@@ -11,9 +10,11 @@ import {
     getUnitTestsTemplate,
     getIntegrationTestsTemplate,
     getSCSSTemplate,
+    createFile,
 } from './helpers';
+import { CreateFileData } from './types';
 
-const main = async (): Promise<void> => {
+export const main = async (): Promise<void> => {
     // Checks for --type and if it has a value
     const componentTypeIndex = process.argv.indexOf('--type');
     let componentTypeValue = '';
@@ -34,89 +35,73 @@ const main = async (): Promise<void> => {
         // Retrieve the value after --name
         componentNameValue = process.argv[componentNameIndex + 1];
         !componentNameValue && errorMessage('No component name was provided');
-        // create component tsx file
         const componentFolderPath = path.join(
             'packages',
             'components',
             componentTypeValue,
             componentNameValue
         );
-        const kebabCase = getKebabCase(componentNameValue);
+
+        const commonFileData: CreateFileData = {
+            basePath: componentFolderPath,
+            component: {
+                name: componentNameValue,
+                type: componentTypeValue,
+            },
+        };
 
         // TODO: use try and catch in case the component already exists
         await fsp.mkdir(componentFolderPath);
         // Component .tsx file
-        const componentFilePath = path.join(
-            componentFolderPath,
-            `${componentNameValue}.tsx`
-        );
-        const interpolation =
-            getComponentTemplateWithValues(componentNameValue);
-        await fsp.writeFile(componentFilePath, interpolation, {
-            encoding: 'utf-8',
+        createFile({
+            ...commonFileData,
+            fileName: `${componentNameValue}.tsx`,
+            templateGenerator: getComponentTemplateWithValues,
         });
         // .gitignore
-        const gitIgnorePath = path.join(componentFolderPath, '.gitignore');
-        const gitIgnoreTemplate = getGitIgnoreTemplate();
-        await fsp.writeFile(gitIgnorePath, gitIgnoreTemplate, {
-            encoding: 'utf-8',
+        createFile({
+            ...commonFileData,
+            fileName: '.gitignore',
+            templateGenerator: getGitIgnoreTemplate,
         });
         // package.json
-        const packageJsonPath = path.join(componentFolderPath, 'package.json');
-        const packageJsonTemplate = getPackageJsonTemplate(kebabCase);
-        await fsp.writeFile(packageJsonPath, packageJsonTemplate, {
-            encoding: 'utf-8',
+        createFile({
+            ...commonFileData,
+            fileName: 'package.json',
+            templateGenerator: getPackageJsonTemplate,
         });
         // types
         const typesFolderPath = path.join(componentFolderPath, 'types');
         await fsp.mkdir(typesFolderPath);
-        const typesPath = path.join(typesFolderPath, 'index.ts');
-        const typesTemplate = getTypesTemplate(componentNameValue);
-        await fsp.writeFile(typesPath, typesTemplate, { encoding: 'utf-8' });
+        createFile({
+            ...commonFileData,
+            basePath: typesFolderPath,
+            fileName: 'index.ts',
+            templateGenerator: getTypesTemplate,
+        });
         // story
-        const storyPath = path.join(
-            componentFolderPath,
-            `${componentNameValue}.stories.tsx`
-        );
-        const storyTemplate = getStoryTemplate(
-            componentNameValue,
-            kebabCase,
-            componentTypeValue
-        );
-        await fsp.writeFile(storyPath, storyTemplate, { encoding: 'utf-8' });
+        createFile({
+            ...commonFileData,
+            fileName: `${componentNameValue}.stories.tsx`,
+            templateGenerator: getStoryTemplate,
+        });
         // unit tests
-        const unitTestsPath = path.join(
-            componentFolderPath,
-            `${componentNameValue}.spec.tsx`
-        );
-        const unitTestsTemplate = getUnitTestsTemplate(
-            componentNameValue,
-            componentTypeValue
-        );
-        await fsp.writeFile(unitTestsPath, unitTestsTemplate, {
-            encoding: 'utf-8',
+        createFile({
+            ...commonFileData,
+            fileName: `${componentNameValue}.spec.tsx`,
+            templateGenerator: getUnitTestsTemplate,
         });
         // integration-tests
-        const integrationTestsPath = path.join(
-            componentFolderPath,
-            `${componentNameValue}.integration.spec.ts`
-        );
-        const integrationTestsTemplate = getIntegrationTestsTemplate(
-            componentNameValue,
-            kebabCase,
-            componentTypeValue
-        );
-        await fsp.writeFile(integrationTestsPath, integrationTestsTemplate, {
-            encoding: 'utf-8',
+        createFile({
+            ...commonFileData,
+            fileName: `${componentNameValue}.integration.spec.ts`,
+            templateGenerator: getIntegrationTestsTemplate,
         });
         // scss
-        const scssPath = path.join(
-            componentFolderPath,
-            `${componentNameValue}.modules.scss`
-        );
-        const scssTemplate = getSCSSTemplate();
-        await fsp.writeFile(scssPath, scssTemplate, {
-            encoding: 'utf-8',
+        createFile({
+            ...commonFileData,
+            fileName: `${componentNameValue}.integration.spec.ts`,
+            templateGenerator: getSCSSTemplate,
         });
     }
 };

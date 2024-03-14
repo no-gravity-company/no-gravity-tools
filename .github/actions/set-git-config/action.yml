@@ -1,0 +1,11 @@
+name: "Set git config"
+description: "Sets git config variables"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set git config
+      shell: bash
+      run: |
+        git config --global user.email "jackblakeston93@gmail.com"
+        git config --global user.name "Jack Blakeston"
