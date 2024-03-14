@@ -1,6 +1,6 @@
 {
     "name": "@no-gravity-tools/component-generator",
-    "version": "1.0.17",
+    "version": "1.0.18",
     "description": "Create template for preact web components",
     "author": "No Gravity Team",
     "private": false,
@@ -8,22 +8,18 @@
     "license": "ISC",
     "main": "lib/index.js",
     "type": "module",
-    "typings": "lib/index.d.ts",
+    "typings": "lib/types/index.d.ts",
     "directories": {
         "lib": "lib"
     },
     "files": [
-        "lib/index.js",
-        "lib/index.js.map"
+        "lib/index.js"
     ],
     "repository": {
         "type": "git",
         "url": "git+https://github.com/no-gravity-company/no-gravity-tools.git"
     },
     "scripts": {
-        "compile": "swc src --out-dir lib/index.js -s",
-        "ts:check": "tsc --emitDeclarationOnly --esModuleInterop --module ESNext --target ESNext --moduleResolution node --declaration --declarationDir ./lib/types src/*.ts",
-        "build": "yarn ts:check & yarn compile",
         "publish-tool": "yarn publish --access=public"
     },
     "bugs": {
