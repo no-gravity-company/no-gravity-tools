@@ -100,7 +100,7 @@ export const main = async (): Promise<void> => {
         // scss
         createFile({
             ...commonFileData,
-            fileName: `${componentNameValue}.integration.spec.ts`,
+            fileName: `${componentNameValue}.modules.scss`,
             templateGenerator: getSCSSTemplate,
         });
     }
