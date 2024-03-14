@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+
+echo "\n--Pre-commit check--\n"
+
+# Make nvm command available
+[ -s "$NVM_DIR/nvm.sh" > /dev/null ] && . "$NVM_DIR/nvm.sh" > /dev/null
+# Set correct node version
+[ -f .nvmrc ] && nvm use > /dev/null
+
+# Exit if any of the processes fail
+set -e
+
+# Pre-commit commands
+npx tsc
+npx yarn lint-fix
+npx yarn format
+
+# Stage files that have been formatted
+git add .
+
+echo "\n--Pre-commit check has passed--\n"

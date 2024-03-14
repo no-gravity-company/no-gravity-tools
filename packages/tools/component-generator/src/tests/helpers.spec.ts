@@ -18,7 +18,7 @@ describe('errorMessage', () => {
     it('should log error message and exit process', () => {
         const consoleErrorSpy = jest
             .spyOn(console, 'error')
-            .mockImplementation(() => {});
+            .mockImplementation();
         const processExitSpy = jest.spyOn(process, 'exit').mockImplementation();
 
         errorMessage('Test Error Message');
