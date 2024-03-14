@@ -3,7 +3,6 @@ on: workflow_call
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
     steps:
       - name: Check out code
         uses: actions/checkout@v3
