@@ -1,0 +1,17 @@
+name: Unit Test
+on: workflow_call
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Setup job
+        uses: ./.github/actions/setup-job
+
+      - name: Install deps
+        run: yarn install
+
+      - name: Run unit tests
+        run: yarn test --passWithNoTests

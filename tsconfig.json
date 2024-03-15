@@ -10,7 +10,9 @@
         "noLib": false,
         "experimentalDecorators": true,
         "baseUrl": "./",
-        "noEmit": true
+        "noEmit": true,
+        "types": ["jest", "node"]
     },
+    "exclude": ["node_modules", "**/lib"],
     "include": ["/**/*.ts"]
 }

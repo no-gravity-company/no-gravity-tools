@@ -1,3 +1,7 @@
+import * as path from 'path';
+import * as fsp from 'fs/promises';
+import { CreateFileData } from './types';
+
 export const errorMessage = (message: string) => {
     console.error(message);
     process.exit(1);
@@ -30,7 +34,8 @@ export const getGitIgnoreTemplate = (): string => {
     return 'lib';
 };
 
-export const getPackageJsonTemplate = (kebabCase: string): string => {
+export const getPackageJsonTemplate = (componentName: string): string => {
+    const kebabCase = getKebabCase(componentName);
     return `{
     "name": "@no-gravity-elements/${kebabCase}",
     "version": "1.0.0",
@@ -73,9 +78,9 @@ export const getTypesTemplate = (componentName: string): string => {
 
 export const getStoryTemplate = (
     componentName: string,
-    kebabCase: string,
     componentType: string
 ): string => {
+    const kebabCase = getKebabCase(componentName);
     return `import { Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit-html';
 
@@ -137,10 +142,10 @@ describe('${componentName}', () => {
 
 export const getIntegrationTestsTemplate = (
     componentName: string,
-    kebabCase: string,
     componentType: string
 ): string => {
     const lowerCaseName = componentName.toLowerCase();
+    const kebabCase = getKebabCase(componentName);
     return `/// <reference types="cypress" />
 
 context('${componentName}', () => {
@@ -161,4 +166,18 @@ export const getSCSSTemplate = (): string => {
 
 }
 `;
+};
+
+export const createFile = async ({
+    basePath,
+    fileName,
+    templateGenerator,
+    component,
+}: CreateFileData) => {
+    if (!fileName || !templateGenerator) return;
+    const newPath = path.join(basePath, fileName);
+    const templateContent = templateGenerator(component.name, component.type);
+    await fsp.writeFile(newPath, templateContent, {
+        encoding: 'utf-8',
+    });
 };
