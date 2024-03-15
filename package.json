@@ -4,10 +4,11 @@
     "workspaces": [
         "packages/tools/*"
     ],
+    "engines": {
+        "node": "16.20.0"
+    },
     "scripts": {
-        "compile": "yarn workspaces run compile",
-        "build": "yarn workspaces run build",
-        "ts:check": "yarn workspaces run ts:check",
+        "build": "tsc && node ./esbuild.config.js",
         "clean": "yarn cache clean --force",
         "hard-clean": "rm -rf node_modules && yarn cache clean --force",
         "publish-tools": "yarn workspaces run publish-tool",
@@ -15,22 +16,19 @@
         "fix-lint": "yarn eslint . --fix",
         "format": "yarn prettier --write .",
         "link-tools": "lerna exec -- yarn link",
-        "unlink-tools": "lerna exec -- yarn unlink",
-        "watch": "node scripts/watch.js"
+        "unlink-tools": "lerna exec -- yarn unlink"
     },
     "devDependencies": {
-        "@swc/cli": "^0.1.62",
-        "@swc/core": "^1.3.37",
+        "@types/node": "^20.11.27",
         "@typescript-eslint/eslint-plugin": "^5.54.0",
         "@typescript-eslint/parser": "^5.54.0",
-        "chokidar": "^3.5.3",
         "esbuild": "^0.17.10",
         "eslint": "^8.35.0",
         "eslint-config-prettier": "^8.6.0",
         "eslint-plugin-prettier": "^4.2.1",
         "lerna": "^6.5.1",
         "prettier": "^2.8.4",
-        "swc": "^1.0.11",
+        "tiny-glob": "^0.2.9",
         "typescript": "^4.9.5"
     }
 }
