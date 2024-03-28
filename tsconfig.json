@@ -1,18 +1,18 @@
 {
-    "compilerOptions": {
-        "target": "esnext",
-        "module": "esnext",
-        "strict": true,
-        "esModuleInterop": true,
-        "moduleResolution": "node",
-        "noImplicitAny": true,
-        "removeComments": true,
-        "noLib": false,
-        "experimentalDecorators": true,
-        "baseUrl": "./",
-        "noEmit": true,
-        "types": ["jest", "node"]
-    },
-    "exclude": ["node_modules", "**/lib"],
-    "include": ["/**/*.ts"]
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "strict": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "noLib": false,
+    "experimentalDecorators": true,
+    "baseUrl": "./",
+    "noEmit": true,
+    "types": ["jest", "node"]
+  },
+  "exclude": ["node_modules", "**/lib"],
+  "include": ["/**/*.ts"]
 }

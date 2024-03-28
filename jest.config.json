@@ -1,31 +1,31 @@
 {
-    "preset": "ts-jest/presets/js-with-ts",
-    "resetModules": true,
-    "testMatch": ["**/?(*.)(spec).ts"],
-    "transform": {
-        "^.+\\.ts'": ["ts-jest"]
-    },
-    "testEnvironment": "node",
-    "transformIgnorePatterns": ["<rootDir>/tests/fixtures"],
-    "moduleFileExtensions": ["ts", "js"],
-    "extensionsToTreatAsEsm": [".ts"],
-    "moduleDirectories": ["node_modules"],
-    "testPathIgnorePatterns": [
-        "/node_modules/",
-        "coverage",
-        "lib",
-        "esbuild.config.js"
-    ],
-    "collectCoverage": true,
-    "verbose": true,
-    "collectCoverageFrom": ["./packages/**/*.ts"],
-    "coverageThreshold": {
-        "global": {
-            "lines": 0,
-            "statements": 0,
-            "functions": 0,
-            "branches": 0
-        }
-    },
-    "coveragePathIgnorePatterns": [".*\\*\\.d\\.ts$"]
+  "preset": "ts-jest/presets/js-with-ts",
+  "resetModules": true,
+  "testMatch": ["**/?(*.)(spec).ts"],
+  "transform": {
+    "^.+\\.ts'": ["ts-jest"]
+  },
+  "testEnvironment": "node",
+  "transformIgnorePatterns": ["<rootDir>/tests/fixtures"],
+  "moduleFileExtensions": ["ts", "js"],
+  "extensionsToTreatAsEsm": [".ts"],
+  "moduleDirectories": ["node_modules"],
+  "testPathIgnorePatterns": [
+    "/node_modules/",
+    "coverage",
+    "lib",
+    "esbuild.config.js"
+  ],
+  "collectCoverage": true,
+  "verbose": true,
+  "collectCoverageFrom": ["./packages/**/*.ts"],
+  "coverageThreshold": {
+    "global": {
+      "lines": 0,
+      "statements": 0,
+      "functions": 0,
+      "branches": 0
+    }
+  },
+  "coveragePathIgnorePatterns": [".*\\*\\.d\\.ts$"]
 }

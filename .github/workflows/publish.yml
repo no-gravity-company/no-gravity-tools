@@ -19,6 +19,8 @@ jobs:
 
       - name: Set git config
         uses: ./.github/actions/set-git-config
+        with:
+          email: ${{ secrets.BOT_EMAIL }}
 
       - name: Install Lerna
         run: yarn global add lerna@^6.5.1

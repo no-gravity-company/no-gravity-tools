@@ -7,8 +7,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Bug Fixes
 
--   scss filename ([0337758](https://github.com/no-gravity-company/no-gravity-tools/commit/03377589fbeb89eda43f65a75dab700a1eb87e50))
+- scss filename ([0337758](https://github.com/no-gravity-company/no-gravity-tools/commit/03377589fbeb89eda43f65a75dab700a1eb87e50))
 
 ### Features
 
--   use esbuild instead of swc ([b1be97c](https://github.com/no-gravity-company/no-gravity-tools/commit/b1be97c5d22fe380a7c88bebfb2aa40793ddfd83))
+- use esbuild instead of swc ([b1be97c](https://github.com/no-gravity-company/no-gravity-tools/commit/b1be97c5d22fe380a7c88bebfb2aa40793ddfd83))

@@ -99,8 +99,7 @@ describe('getStoryTemplate', () => {
 describe('getUnitTestsTemplate', () => {
   it('should generate a valid unit tests template', () => {
     const componentName = 'TestComponent';
-    const componentType = 'test';
-    const template = getUnitTestsTemplate(componentName, componentType);
+    const template = getUnitTestsTemplate(componentName);
 
     expect(template).toContain(`describe('${componentName}'`);
     expect(template).toContain(

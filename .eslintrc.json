@@ -11,9 +11,8 @@
     "sourceType": "module",
     "project": "./tsconfig.json"
   },
-  "ignorePatterns": ["**/*.js"],
+  "ignorePatterns": ["**/*.js", "index.d.ts"],
   "rules": {
-    "indent": [2, "space"],
     "eol-last": ["error", "always"]
   }
 }

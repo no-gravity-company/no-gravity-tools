@@ -122,10 +122,7 @@ export const Default: Story = {
 `;
 };
 
-export const getUnitTestsTemplate = (
-  componentName: string,
-  componentType: string
-): string => {
+export const getUnitTestsTemplate = (componentName: string): string => {
   return `import { h } from 'preact';
 import { shallow } from 'enzyme';
 
