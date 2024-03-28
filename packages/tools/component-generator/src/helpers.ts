@@ -3,21 +3,21 @@ import * as fsp from 'fs/promises';
 import { CreateFileData } from './types';
 
 export const errorMessage = (message: string) => {
-    console.error(message);
-    process.exit(1);
+  console.error(message);
+  process.exit(1);
 };
 
 export const getKebabCase = (name: string) => {
-    return name
-        .replace(/([a-z])([A-Z])/g, '$1-$2')
-        .replace(/[\s_]+/g, '-')
-        .toLocaleLowerCase();
+  return name
+    .replace(/([a-z])([A-Z])/g, '$1-$2')
+    .replace(/[\s_]+/g, '-')
+    .toLocaleLowerCase();
 };
 
 export const getComponentTemplateWithValues = (
-    componentName: string
+  componentName: string
 ): string => {
-    return `import { Fragment, FunctionComponent, h } from 'preact';
+  return `import { Fragment, FunctionComponent, h } from 'preact';
 import { ${componentName}Props } from './types'
 
 const ${componentName}: FunctionComponent<${componentName}Props> = ({ x }: ${componentName}Props) => {
@@ -31,35 +31,34 @@ export default ${componentName};
 };
 
 export const getGitIgnoreTemplate = (): string => {
-    return 'lib';
+  return 'lib';
 };
 
 export const getPackageJsonTemplate = (componentName: string): string => {
-    const kebabCase = getKebabCase(componentName);
-    return `{
+  const kebabCase = getKebabCase(componentName);
+  return `{
     "name": "@no-gravity-elements/${kebabCase}",
     "version": "1.0.0",
     "description": "No Gravity Element",
-    "author": "No Gravity Team",
+    "author": "No Gravity Company",
     "private": false,
     "homepage": "https://github.com/no-gravity-company/no-gravity-elements#readme",
     "license": "ISC",
     "main": "lib/index.js",
-    "typings": "lib/index.d.ts",
+    "typings": "lib/index.ts",
     "directories": {
       "lib": "lib"
     },
     "files": [
       "lib/index.js",
       "lib/index.js.map",
-      "types/index.d.ts"
+      "types/index.ts"
     ],
     "repository": {
       "type": "git",
       "url": "git+https://github.com/no-gravity-company/no-gravity-elements.git"
     },
     "scripts": {
-      "build": "tsc --jsx react --emitDeclarationOnly --esModuleInterop --module ESNext --target ESNext --moduleResolution node --declaration --declarationDir ./lib/types src/*.ts && esbuild src/index.ts --bundle --outfile=lib/index.js --platform=node --target=es2018 --minify --sourcemap --external:react --external:react-dom",
       "publish-component": "yarn publish --access=public"
     },
     "bugs": {
@@ -70,21 +69,21 @@ export const getPackageJsonTemplate = (componentName: string): string => {
 };
 
 export const getTypesTemplate = (componentName: string): string => {
-    return `export interface ${componentName}Props {
+  return `export interface ${componentName}Props {
     x: string;
 }
     `;
 };
 
 export const getStoryTemplate = (
-    componentName: string,
-    componentType: string
+  componentName: string,
+  componentType: string
 ): string => {
-    const kebabCase = getKebabCase(componentName);
-    return `import { Meta, StoryObj } from '@storybook/web-components';
+  const kebabCase = getKebabCase(componentName);
+  return `import { Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit-html';
 
-import { ${componentName}Props } from '@${componentType}/${componentName}/types';
+import { ${componentName}Props } from './types';
 
 import '@no-gravity-elements/${kebabCase}';
 
@@ -123,14 +122,11 @@ export const Default: Story = {
 `;
 };
 
-export const getUnitTestsTemplate = (
-    componentName: string,
-    componentType: string
-): string => {
-    return `import { h } from 'preact';
+export const getUnitTestsTemplate = (componentName: string): string => {
+  return `import { h } from 'preact';
 import { shallow } from 'enzyme';
 
-import ${componentName} from '@${componentType}/${componentName}/${componentName}';
+import ${componentName} from './${componentName}';
 
 describe('${componentName}', () => {
   it('should match the snapshot', () => {
@@ -141,12 +137,12 @@ describe('${componentName}', () => {
 };
 
 export const getIntegrationTestsTemplate = (
-    componentName: string,
-    componentType: string
+  componentName: string,
+  componentType: string
 ): string => {
-    const lowerCaseName = componentName.toLowerCase();
-    const kebabCase = getKebabCase(componentName);
-    return `/// <reference types="cypress" />
+  const lowerCaseName = componentName.toLowerCase();
+  const kebabCase = getKebabCase(componentName);
+  return `/// <reference types="cypress" />
 
 context('${componentName}', () => {
     beforeEach(() => {
@@ -161,7 +157,7 @@ context('${componentName}', () => {
 };
 
 export const getSCSSTemplate = (): string => {
-    return `@import '../../../stylesheets/base/variables';
+  return `@import '../../../stylesheets/base/variables';
 :host {
 
 }
@@ -169,15 +165,15 @@ export const getSCSSTemplate = (): string => {
 };
 
 export const createFile = async ({
-    basePath,
-    fileName,
-    templateGenerator,
-    component,
+  basePath,
+  fileName,
+  templateGenerator,
+  component,
 }: CreateFileData) => {
-    if (!fileName || !templateGenerator) return;
-    const newPath = path.join(basePath, fileName);
-    const templateContent = templateGenerator(component.name, component.type);
-    await fsp.writeFile(newPath, templateContent, {
-        encoding: 'utf-8',
-    });
+  if (!fileName || !templateGenerator) return;
+  const newPath = path.join(basePath, fileName);
+  const templateContent = templateGenerator(component.name, component.type);
+  await fsp.writeFile(newPath, templateContent, {
+    encoding: 'utf-8',
+  });
 };

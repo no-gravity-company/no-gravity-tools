@@ -1,19 +1,18 @@
 {
-    "extends": [
-        "eslint:recommended",
-        "plugin:@typescript-eslint/recommended",
-        "prettier"
-    ],
-    "plugins": ["@typescript-eslint", "prettier"],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "ecmaVersion": 2018,
-        "sourceType": "module",
-        "project": "./tsconfig.json"
-    },
-    "ignorePatterns": ["**/*.js"],
-    "rules": {
-        "indent": [2, "tab"],
-        "eol-last": ["error", "always"]
-    }
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "plugins": ["@typescript-eslint", "prettier"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "ignorePatterns": ["**/*.js", "index.d.ts"],
+  "rules": {
+    "eol-last": ["error", "always"]
+  }
 }

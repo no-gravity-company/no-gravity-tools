@@ -1,5 +1,9 @@
 name: "Set git config"
 description: "Sets git config variables"
+inputs:
+  email:
+    required: true
+    description: "The email of the github account"
 
 runs:
   using: "composite"
@@ -7,5 +11,5 @@ runs:
     - name: Set git config
       shell: bash
       run: |
-        git config --global user.email "jackblakeston93@gmail.com"
-        git config --global user.name "Jack Blakeston"
+        git config --global user.email "${{ inputs.email }}"
+        git config --global user.name "No Gravity Bot"
